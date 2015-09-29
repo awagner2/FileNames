@@ -1,0 +1,25 @@
+import csv
+import arcpy
+import os
+import sys
+
+arcpy.ListFeatureClasses()
+#input = r"F:\Desktop\Tablet_Test\CurbRamps.gdb\ADACurbRamps"
+#inputField = "RAMPID"
+matchTable = r"F:\Desktop\Tablet_Test\matchtable.csv"
+matchField = "RAMPID"
+pathField = "Picture" 
+picFolder = r"F:\Desktop\Pictures"
+
+# create a new Match Table csv file
+writer = csv.writer(open(matchTable, "wb"), delimiter=",")
+
+# write a header row (the table will have two columns: RampID and Picture)
+writer.writerow([matchField, pathField])
+
+# iterate through each picture in the directory and write a row to the table
+for file in os.listdir(picFolder):
+    if str(file).find(".jpg") > -1:
+        writer.writerow([str(file).replace(".jpg", ""), file])
+
+del writer
