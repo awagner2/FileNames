@@ -1,0 +1,22 @@
+#Takes the ATTACH table and exports the attachments, naming them according to the FILENAME field.
+#Selecting features in the ATTACH table means only those attachments will be downloaded.
+from arcpy import da
+import os
+
+#inTable = arcpy.GetParameterAsText(0) #if creating a tool, set parameter as Table
+#fileLocation = arcpy.GetParameterAsText(1) #if creating a tool, set parameter as Folder
+#inTable = r"C:\Users\wagneran\Desktop\Tablet_Test\CurbRamps.gdb\ADACurbRamps__ATTACH"
+inTable = r"C:\Users\wagneran\Desktop\Tablet_Test\LatLong.gdb\ADACurbRamps__ATTACH"
+fileLocation = r"C:\Users\wagneran\Desktop\Photos"
+
+with da.SearchCursor(inTable,['DATA','FILENAME']) as cursor: 
+	for row in cursor:
+		binaryRep = row[0]
+		fileName = row[1]
+		#binaryRep = row[inTable]
+		#fileName = row[fileLocation]
+		# save to disk
+		open(fileLocation + os.sep + str(fileName), 'wb').write(binaryRep.tobytes())
+		del row
+		del binaryRep
+		del fileName
