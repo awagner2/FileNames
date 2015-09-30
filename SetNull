@@ -1,0 +1,43 @@
+#------Sets Null all rows or those that are selected--------------#
+import arcpy
+from arcpy import env
+import string
+
+# Set the workspace
+env.workspace = "C:/Users/wagneran/Documents/ADAMasterCopy.gdb"
+#env.workspace = "C:/Users/wagneran/Desktop/Tablet_Test/CurbRamps.gdb"
+#env.workspace = "F:/Desktop/Tablet_Test/CurbRamps.gdb"
+
+# Use row object to get and set field values
+cur = arcpy.UpdateCursor("ADACurbRamps_ATTACH")
+
+# Iterate through rows and update values
+for row in cur:
+    row.setNull("FILENAME")
+    cur.updateRow(row)
+
+del cur, row
+
+
+
+#------Sets Null rows meeting a certain criteria------------------#
+from arcpy import env
+import string
+
+# Set the workspace
+#
+env.workspace = "C:/Users/wagneran/Documents/AddCurbs.gdb"
+
+# Use row object to get and set field values
+# 
+cur = arcpy.UpdateCursor("MoreCurbs", '"ROUTE" = \'2A\'' )
+
+# Iterate through rows and update values
+#
+for row in cur:
+    row.setNull("DES1")
+    cur.updateRow(row)
+
+del cur, row
+
+
