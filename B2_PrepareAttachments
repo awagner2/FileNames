@@ -1,0 +1,19 @@
+#Prepares the attachments table by creating a FILENAME field and filling it with the RampID.jpg.
+#The attachments can then be given a meaningful name.
+performed a field calculation like [FILENAME] = RAMPID + “.jpg”. 
+import arcpy
+import os
+
+arcpy.env.workspace = "C:/Users/sniderp/Documents/Practice.gdb"
+
+in_table = "ADACurbRamps_ATTACH"
+newField = "FILENAME"
+attachField= "REL_GLOBALID"
+fc_table = "FeatureClass1"
+fcField="GlobalID1"
+
+arcpy.AddField_management (in_table, newField, "TEXT", "", "", 20)
+
+arcpy.AddJoin_management (in_table, attachField, fc_table, fcField)
+arcpy.CalculateField_management((in_table, in_table +.+ newField, fc_table + "!.RAMPID!" + ".jpg", "PYTHON_9.3")
+arcpy.RemoveJoin_management (in_table)
