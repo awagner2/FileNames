@@ -1,0 +1,38 @@
+#Attaches Curb Ramp photos from a folder whose names match the RAMPID. 
+#Running script repeatedly will overwrite the .csv file and attach the same pic multiple times.
+import csv
+import arcpy
+import os
+import sys
+
+input = r"C:\Users\wagneran\Documents\ADAMasterCopy.gdb\ADACurbRamps"
+inputField = "RAMPID"
+matchTable = r"C:\Users\wagneran\Desktop\matchtable.csv"
+matchField = "RAMPID"
+pathField = "Picture" 
+picFolder = r"F:\Desktop\Pictures"
+
+try:
+    # create a new Match Table csv file
+    writer = csv.writer(open(matchTable, "wb"), delimiter=",")
+
+    # write a header row (the table will have two columns: ParcelID and Picture)
+    writer.writerow([matchField, pathField])
+
+    # iterate through each picture in the directory and write a row to the table
+    for file in os.listdir(picFolder):
+        if str(file).find(".jpg") > -1:
+            writer.writerow([str(file).replace(".jpg", ""), file])
+
+    del writer
+
+    # the input feature class must first be GDB attachments enabled
+    arcpy.EnableAttachments_management(input)
+
+	#Select newest records only
+	#arcpy.SelectLayerByAttribute_management (input, "NEW_SELECTION", "InspDate" >= date '2013-09-23 07:36:43' ")
+	
+    # use the match table with the Add Attachments tool
+    arcpy.AddAttachments_management(input, inputField, matchTable, matchField, pathField, picFolder)
+except:
+    print arcpy.GetMessages(2)
