@@ -1,0 +1,27 @@
+#Batch rename of files when you have a text file containing both the old and new names.
+import csv
+import arcpy
+import os
+import sys
+
+matchTable = r"C:\Users\wagneran\Desktop\RenameFile.txt" #contains the old, new names
+picFolder = r"C:\Users\wagneran\Desktop\Attachments" #contains the files to be renamed
+path = r"C:\Users\wagneran\Desktop\Attachments"
+
+#Goes through the files in the folder and searches the text file for the line with a matching name. 
+for file in os.listdir(picFolder):
+	filename = str(file).replace(".jpg", "")
+	search = open(matchTable, 'r')
+	for line in search:
+	
+#Creates the new file name when the right line is found.
+		if filename in line:
+			newname = line[-16:-1] + ".jpg"
+#			print os.path.join(path, file)
+#			print os.path.join(path, newname)
+
+#Renames file name
+			os.rename(os.path.join(path, file), os.path.join(path, newname))
+
+#ISSUE: Last file may not be named correctly because it doesn't have a 
+#		carriage return. So it needs characters [-15:].
